@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-M9SJ7J5R');</script>
+    <!-- End Google Tag Manager -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail Artikel</title>
@@ -29,7 +36,11 @@
     </style>
 </head>
 <body>
-    <button>iframe button 1</button>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M9SJ7J5R"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <button id="'iframeButton1">iframe button 1</button>
     <h2>What is Lorem Ipsum?</h2>
     <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
     
@@ -41,6 +52,36 @@
     <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.</p>
     <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.</p>
 
-    <button>iframe button 2</button>
+    <button id="iframeButton2">iframe button 2</button>
+
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        document.getElementById('iframeButton1').onclick = function() {
+            const dataToPush = {
+                event: 'general_event',
+                event_name: 'iframe_button1_clicked',
+                event_action: 'clicked on iframe Button 1',
+            };
+            
+            window.dataLayer.push(dataToPush);
+            console.log('Data telah dikirim ke dataLayer:', dataToPush);
+        };
+    </script>
+
+    <script>
+    window.dataLayer = window.dataLayer || [];
+
+    document.getElementById('iframeButton2').onclick = function() {
+        const dataToPush = {
+            event: 'general_event',
+            event_name: 'iframe_button2_clicked',
+            event_action: 'clicked on iframe Button 2',
+        };
+        
+        window.dataLayer.push(dataToPush);
+        console.log('Data telah dikirim ke dataLayer:', dataToPush);
+    };
+    </script>
 </body>
 </html>
