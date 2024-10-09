@@ -57,31 +57,44 @@
     <script>
         window.dataLayer = window.dataLayer || [];
 
-        document.getElementById('iframeButton1').onclick = function() {
+        // Fungsi untuk push data ke dataLayer iframe dan mengirim pesan ke parent
+        function pushDataToGTM(buttonName) {
             const dataToPush = {
                 event: 'general_event',
-                event_name: 'iframe_button1_clicked',
-                event_action: 'clicked on iframe Button 1',
+                event_name: buttonName,
+                event_action: 'clicked on ' + buttonName,
             };
-            
+
+            // Push ke dataLayer di iframe
             window.dataLayer.push(dataToPush);
-            console.log('Data telah dikirim ke dataLayer:', dataToPush);
-        };
-    </script>
+            console.log('Data telah dikirim ke dataLayer Iframe:', dataToPush);
 
-    <script>
-    window.dataLayer = window.dataLayer || [];
+            // Kirim pesan ke parent untuk juga push data ke dataLayer parent
+            window.parent.postMessage({
+                type: 'iframeButtonClick',
+                dataLayer: dataToPush
+            }, '*');
+        }
 
-    document.getElementById('iframeButton2').onclick = function() {
-        const dataToPush = {
-            event: 'general_event',
-            event_name: 'iframe_button2_clicked',
-            event_action: 'clicked on iframe Button 2',
+        document.getElementById('iframeButton1').onclick = function() {
+            pushDataToGTM('iframe_button1_clicked');
         };
-        
-        window.dataLayer.push(dataToPush);
-        console.log('Data telah dikirim ke dataLayer:', dataToPush);
-    };
+
+        document.getElementById('iframeButton2').onclick = function() {
+            pushDataToGTM('iframe_button2_clicked');
+        };
+
+        // Mendengarkan pesan dari parent
+        window.addEventListener("message", function(event) {
+            if (event.data && event.data.type === 'iframeButtonClick') {
+                // Data dari parent yang dikirim ke iframe
+                const parentData = event.data.dataLayer;
+
+                // Push data ke dataLayer iframe
+                window.dataLayer.push(parentData);
+                console.log('Data diterima dari parent dan dikirim ke dataLayer Iframe:', parentData);
+            }
+        });
     </script>
 </body>
 </html>

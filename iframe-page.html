@@ -63,7 +63,7 @@
 
     <p>iframe page:</p>
 
-    <iframe src="artikel.html" title="Detail Artikel"></iframe>
+    <iframe src="artikel.html" id="myIframe" title="Detail Artikel"></iframe>
 
 
 
@@ -76,10 +76,30 @@
                 event_name: 'parent_button_clicked',
                 event_action: 'clicked on Parent Button',
             };
-            
+
+            // Push ke dataLayer di parent
             window.dataLayer.push(dataToPush);
-            console.log('Data telah dikirim ke dataLayer:', dataToPush);
+            console.log('Data telah dikirim ke dataLayer Parent:', dataToPush);
+
+            // Kirim pesan ke iframe untuk juga push data ke dataLayer iframe
+            const iframe = document.getElementById('myIframe');
+            iframe.contentWindow.postMessage({
+                type: 'iframeButtonClick',
+                dataLayer: dataToPush
+            }, '*');
         };
+
+        // Mendengarkan pesan dari iframe
+        window.addEventListener("message", function(event) {
+            if (event.data && event.data.type === 'iframeButtonClick') {
+                // Data dari iframe yang dikirim ke parent
+                const iframeData = event.data.dataLayer;
+
+                // Push data ke dataLayer parent
+                window.dataLayer.push(iframeData);
+                console.log('Data diterima dari iframe dan dikirim ke dataLayer Parent:', iframeData);
+            }
+        });
     </script>
 </body>
 </html>
