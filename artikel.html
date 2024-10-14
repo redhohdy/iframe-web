@@ -83,6 +83,10 @@
 
         document.getElementById('iframeButton2').onclick = function() {
             pushDataToGTM('iframe_button2_clicked');
+            window.parent.postMessage({
+                type: 'changeIframeSource',
+                newSource: 'artikel2.html'
+            }, '*');
         };
 
         // document.getElementById('iframeButton3').onclick = function() {
@@ -100,6 +104,14 @@
                 window.top.location.href = 'iframe-page2.html';
             }, 1000);
         };
+
+        // document.getElementById('newIframeButton').onclick = function() {
+        //     pushDataToGTM('iframe_button4_clicked');
+        //     window.parent.postMessage({
+        //         type: 'changeIframeSource',
+        //         newSource: 'artikel2.html'
+        //     }, '*');
+        // };
 
         // Mendengarkan pesan dari parent
         window.addEventListener("message", function(event) {

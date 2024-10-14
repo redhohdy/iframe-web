@@ -100,6 +100,12 @@
                 console.log('Data diterima dari iframe dan dikirim ke dataLayer Parent:', iframeData);
             }
         });
+
+        window.addEventListener("message", function(event) {
+            if (event.data && event.data.type === 'changeIframeSource') {
+                document.getElementById('myIframe').src = event.data.newSource;
+            }
+        });
     </script>
 </body>
 </html>
