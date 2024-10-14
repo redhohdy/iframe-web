@@ -59,7 +59,7 @@
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
     <h1>Parent Page 2</h1>
-    <button onclick="window.history.back()" id="parentButton">Back</button>
+    <button onclick="window.location.href='iframe-page.html'">Back</button>
 
     <p>iframe page:</p>
 
@@ -67,7 +67,7 @@
 
 
 
-    <script>
+    <!-- <script>
         window.dataLayer = window.dataLayer || [];
 
         document.getElementById('parentButton').onclick = function() {
@@ -100,6 +100,6 @@
                 console.log('Data diterima dari iframe dan dikirim ke dataLayer Parent:', iframeData);
             }
         });
-    </script>
+    </script> -->
 </body>
 </html>
