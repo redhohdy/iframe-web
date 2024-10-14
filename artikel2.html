@@ -41,7 +41,7 @@
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
     <button id="iframeButton1">iframe button 1</button>
-    <h2>iframe 1</h2>
+    <h2>iframe 2</h2>
     <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
     
     <p>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
@@ -53,7 +53,6 @@
     <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.</p>
 
     <button id="iframeButton2">iframe button 2</button>
-    <button id="iframeButton3">iframe button 3</button>
 
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -83,22 +82,6 @@
 
         document.getElementById('iframeButton2').onclick = function() {
             pushDataToGTM('iframe_button2_clicked');
-        };
-
-        // document.getElementById('iframeButton3').onclick = function() {
-        //     pushDataToGTM('iframe_button3_clicked');
-
-        //     // Change the iframe source but remain on the same parent page
-        //     document.getElementById('myIframe').src ='artikel2.html';
-        // };
-
-        document.getElementById('iframeButton3').onclick = function() {
-            pushDataToGTM('iframe_button3_clicked');
-
-            // Redirect to a new parent page with a new iframe
-            setTimeout(() => {
-                window.top.location.href = 'iframe-page2.html';
-            }, 500);
         };
 
         // Mendengarkan pesan dari parent
