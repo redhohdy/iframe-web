@@ -69,41 +69,61 @@
 
     <script>
         window.dataLayer = window.dataLayer || [];
-
+    
+        let startDate = new Date();
+        let elapsedTime = 0;
+    
+        function focus() {
+            startDate = new Date();
+        }
+    
+        function blur() {
+            const endDate = new Date();
+            const spentTime = endDate.getTime() - startDate.getTime();
+            elapsedTime += spentTime;
+        }
+    
+        function beforeUnload() {
+            const endDate = new Date();
+            const spentTime = endDate.getTime() - startDate.getTime();
+            elapsedTime += spentTime;
+    
+            // Push total waktu ke dataLayer di Parent sebelum unload
+            window.dataLayer.push({
+                event: 'page_time_spent',
+                total_time_spent: elapsedTime
+            });
+        }
+    
+        window.addEventListener('focus', focus);
+        window.addEventListener('blur', blur);
+        window.addEventListener('beforeunload', beforeUnload);
+    
         document.getElementById('parentButton').onclick = function() {
             const dataToPush = {
                 event: 'general_event',
                 event_name: 'parent_button_clicked',
                 event_action: 'clicked on Parent Button',
             };
-
-            // Push ke dataLayer di parent
+    
             window.dataLayer.push(dataToPush);
             console.log('Data telah dikirim ke dataLayer Parent:', dataToPush);
-
-            // Kirim pesan ke iframe untuk juga push data ke dataLayer iframe
+    
+            // Kirim pesan ke iframe
             const iframe = document.getElementById('myIframe');
             iframe.contentWindow.postMessage({
                 type: 'iframeButtonClick',
                 dataLayer: dataToPush
             }, '*');
         };
-
+    
         // Mendengarkan pesan dari iframe
         window.addEventListener("message", function(event) {
             if (event.data && event.data.type === 'iframeButtonClick') {
-                // Data dari iframe yang dikirim ke parent
                 const iframeData = event.data.dataLayer;
-
-                // Push data ke dataLayer parent
+    
                 window.dataLayer.push(iframeData);
                 console.log('Data diterima dari iframe dan dikirim ke dataLayer Parent:', iframeData);
-            }
-        });
-
-        window.addEventListener("message", function(event) {
-            if (event.data && event.data.type === 'changeIframeSource') {
-                document.getElementById('myIframe').src = event.data.newSource;
             }
         });
     </script>

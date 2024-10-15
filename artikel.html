@@ -57,69 +57,76 @@
 
     <script>
         window.dataLayer = window.dataLayer || [];
-
-        // Fungsi untuk push data ke dataLayer iframe dan mengirim pesan ke parent
+    
+        let startDate = new Date();
+        let elapsedTime = 0;
+    
+        function focus() {
+            startDate = new Date();
+        }
+    
+        function blur() {
+            const endDate = new Date();
+            const spentTime = endDate.getTime() - startDate.getTime();
+            elapsedTime += spentTime;
+        }
+    
+        function beforeUnload() {
+            const endDate = new Date();
+            const spentTime = endDate.getTime() - startDate.getTime();
+            elapsedTime += spentTime;
+    
+            // Push total waktu ke dataLayer di Iframe sebelum unload
+            window.dataLayer.push({
+                event: 'page_time_spent',
+                total_time_spent: elapsedTime
+            });
+        }
+    
+        window.addEventListener('focus', focus);
+        window.addEventListener('blur', blur);
+        window.addEventListener('beforeunload', beforeUnload);
+    
         function pushDataToGTM(buttonName) {
             const dataToPush = {
                 event: 'general_event',
                 event_name: buttonName,
                 event_action: 'clicked on ' + buttonName,
             };
-
-            // Push ke dataLayer di iframe
+    
             window.dataLayer.push(dataToPush);
             console.log('Data telah dikirim ke dataLayer Iframe:', dataToPush);
-
-            // Kirim pesan ke parent untuk juga push data ke dataLayer parent
+    
             window.parent.postMessage({
                 type: 'iframeButtonClick',
                 dataLayer: dataToPush
             }, '*');
         }
-
-        document.getElementById('iframeButton1').onclick = function() {
-            pushDataToGTM('iframe_button1_clicked');
-        };
-
-        document.getElementById('iframeButton2').onclick = function() {
-            pushDataToGTM('iframe_button2_clicked');
-            window.parent.postMessage({
-                type: 'changeIframeSource',
-                newSource: 'artikel2.html'
-            }, '*');
-        };
-
-        // document.getElementById('iframeButton3').onclick = function() {
-        //     pushDataToGTM('iframe_button3_clicked');
-
-        //     // Change the iframe source but remain on the same parent page
-        //     document.getElementById('myIframe').src ='artikel2.html';
-        // };
-
+    
         document.getElementById('iframeButton3').onclick = function() {
             pushDataToGTM('iframe_button3_clicked');
-
-            // Redirect to a new parent page with a new iframe
+    
+            const totalTimeData = {
+                event: 'total_time_spent',
+                total_time_spent: elapsedTime
+            };
+    
+            // Kirim total waktu dari iframe ke parent
+            window.parent.postMessage({
+                type: 'iframeButtonClick',
+                dataLayer: totalTimeData
+            }, '*');
+    
+            // Redirect ke halaman lain setelah 1 detik
             setTimeout(() => {
                 window.top.location.href = 'iframe-page2.html';
             }, 1000);
         };
-
-        // document.getElementById('newIframeButton').onclick = function() {
-        //     pushDataToGTM('iframe_button4_clicked');
-        //     window.parent.postMessage({
-        //         type: 'changeIframeSource',
-        //         newSource: 'artikel2.html'
-        //     }, '*');
-        // };
-
-        // Mendengarkan pesan dari parent
+    
         window.addEventListener("message", function(event) {
             if (event.data && event.data.type === 'iframeButtonClick') {
-                // Data dari parent yang dikirim ke iframe
                 const parentData = event.data.dataLayer;
-
-                // Push data ke dataLayer iframe
+    
                 window.dataLayer.push(parentData);
                 console.log('Data diterima dari parent dan dikirim ke dataLayer Iframe:', parentData);
             }

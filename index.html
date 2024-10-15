@@ -45,7 +45,22 @@
     <!-- End Google Tag Manager (noscript) -->
     <h1>Parent Page</h1>
     
-    <button onclick="window.location.href='iframe-page.html'">Detail Atikel</button>
+    <button id="detailArtikelButton">Detail Atikel</button>
+
+
+    <script>
+        document.getElementById('detailArtikelButton').addEventListener('click', function() {
+
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                event: 'general_event',
+                event_name: 'detail_artikel_clicked',
+                event_action: 'clicked on Detail Artikel Button',
+            });
+
+            window.location.href = 'iframe-page.html';
+        });
+    </script>
 
 </body>
 </html>
