@@ -57,9 +57,38 @@
 
     <script>
         window.dataLayer = window.dataLayer || [];
+        
+        let startDate = new Date();
+        let elapsedTime = 0;
 
-        let iframeStartTime = Date.now();
-        let iframeTotalTimeSpent = 0;
+        const focus = function() {
+            startDate = new Date();
+        };
+
+        const blur = function() {
+            const endDate = new Date();
+            const spentTime = endDate.getTime() - startDate.getTime();
+            elapsedTime += spentTime;
+        };
+
+        const beforeunload = function() {
+            const endDate = new Date();
+            const spentTime = endDate.getTime() - startDate.getTime();
+            elapsedTime += spentTime;
+
+
+            window.dataLayer.push({
+                event: 'iframe_time_spent',
+                total_time: elapsedTime
+            });
+            
+            console.log('Total waktu di halaman iframe:', elapsedTime, 'milliseconds');
+        };
+
+
+        window.addEventListener('focus', focus);
+        window.addEventListener('blur', blur);
+        window.addEventListener('beforeunload', beforeunload);
 
         // Fungsi untuk push data ke dataLayer iframe dan mengirim pesan ke parent
         function pushDataToGTM(buttonName) {
@@ -95,15 +124,6 @@
         document.getElementById('iframeButton3').onclick = function() {
             pushDataToGTM('iframe_button3_clicked');
 
-            // Menghitung total waktu yang dihabiskan di iframe
-            iframeTotalTimeSpent += Math.floor((Date.now() - iframeStartTime) / 1000); // dalam detik
-            
-            // Push total waktu ke parent
-            window.parent.postMessage({
-                type: 'totalTimeSpent',
-                totalTimeSpent: iframeTotalTimeSpent
-            }, '*');
-
             // Redirect to a new parent page with a new iframe
             setTimeout(() => {
                 window.top.location.href = 'iframe-page2.html';
@@ -113,21 +133,9 @@
         // Mendengarkan pesan dari parent
         window.addEventListener("message", function(event) {
             if (event.data && event.data.type === 'iframeButtonClick') {
-                // Data dari parent yang dikirim ke iframe
                 const parentData = event.data.dataLayer;
-
-                // Push data ke dataLayer iframe
                 window.dataLayer.push(parentData);
                 console.log('Data diterima dari parent dan dikirim ke dataLayer Iframe:', parentData);
-            }
-
-            if (event.data && event.data.type === 'totalTimeSpent') {
-                // Push total time from parent
-                window.dataLayer.push({
-                    event: 'total_time_spent',
-                    total_time_spent: event.data.totalTimeSpent
-                });
-                console.log('Total waktu dari parent diterima di iframe:', event.data.totalTimeSpent);
             }
         });
     </script>
