@@ -58,39 +58,38 @@
     <script>
         window.dataLayer = window.dataLayer || [];
         
-        let startDate = new Date();
-        let elapsedTime = 0;
+        // let startDate = new Date();
+        // let elapsedTime = 0;
 
-        const focus = function() {
-            startDate = new Date();
-        };
+        // const focus = function() {
+        //     startDate = new Date();
+        // };
 
-        const blur = function() {
-            const endDate = new Date();
-            const spentTime = endDate.getTime() - startDate.getTime();
-            elapsedTime += spentTime;
-        };
+        // const blur = function() {
+        //     const endDate = new Date();
+        //     const spentTime = endDate.getTime() - startDate.getTime();
+        //     elapsedTime += spentTime;
+        // };
 
-        const beforeunload = function() {
-            const endDate = new Date();
-            const spentTime = endDate.getTime() - startDate.getTime();
-            elapsedTime += spentTime;
+        // const beforeunload = function() {
+        //     const endDate = new Date();
+        //     const spentTime = endDate.getTime() - startDate.getTime();
+        //     elapsedTime += spentTime;
 
 
-            window.dataLayer.push({
-                event: 'iframe_time_spent',
-                total_time: elapsedTime
-            });
+        //     window.dataLayer.push({
+        //         event: 'iframe_time_spent',
+        //         total_time: elapsedTime
+        //     });
             
-            console.log('Total waktu di halaman iframe:', elapsedTime, 'milliseconds');
-        };
+        //     console.log('Total waktu di halaman iframe:', elapsedTime, 'milliseconds');
+        // };
 
 
-        window.addEventListener('focus', focus);
-        window.addEventListener('blur', blur);
-        window.addEventListener('beforeunload', beforeunload);
+        // window.addEventListener('focus', focus);
+        // window.addEventListener('blur', blur);
+        // window.addEventListener('beforeunload', beforeunload);
 
-        // Fungsi untuk push data ke dataLayer iframe dan mengirim pesan ke parent
         function pushDataToGTM(buttonName) {
             const dataToPush = {
                 event: 'general_event',
@@ -98,7 +97,6 @@
                 event_action: 'clicked on ' + buttonName,
             };
 
-            // Push ke dataLayer di iframe
             window.dataLayer.push(dataToPush);
             console.log('Data telah dikirim ke dataLayer Iframe:', dataToPush);
 
@@ -124,7 +122,6 @@
         document.getElementById('iframeButton3').onclick = function() {
             pushDataToGTM('iframe_button3_clicked');
 
-            // Redirect to a new parent page with a new iframe
             setTimeout(() => {
                 window.top.location.href = 'iframe-page2.html';
             }, 1000);
@@ -136,6 +133,25 @@
                 const parentData = event.data.dataLayer;
                 window.dataLayer.push(parentData);
                 console.log('Data diterima dari parent dan dikirim ke dataLayer Iframe:', parentData);
+            }
+        });
+
+        window.addEventListener("message", function(event) {
+            if (event.data && event.data.type === 'iframeButtonClick') {
+                const parentData = event.data.dataLayer;
+                window.dataLayer.push(parentData);
+                console.log('Data diterima dari parent dan dikirim ke dataLayer Iframe:', parentData);
+            }
+        });
+
+        window.addEventListener('message', function(event) {
+        if (event.data.event === 'page_time_spent') {
+            window.dataLayer.push({
+                event: 'page_time_spent',
+                total_time: event.data.total_time
+            });
+            
+            console.log('Total waktu di iframe berdasarkan parent:', event.data.total_time, 'milliseconds');
             }
         });
     </script>
