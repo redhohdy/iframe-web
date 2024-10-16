@@ -103,17 +103,5 @@
     </script> -->
 
     <script src="time-on-page.js"></script>
-    <script>
-        window.addEventListener('message', function(event) {
-            if (event.data.event === 'page_time_spent') {
-                window.dataLayer.push({
-                    event: 'page_time_spent',
-                    total_time: event.data.total_time
-                });
-                
-                console.log('Total waktu di iframe berdasarkan parent:', event.data.total_time, 'milliseconds');
-                }
-            });
-    </script>
 </body>
 </html>
