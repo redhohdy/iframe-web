@@ -52,7 +52,6 @@
             cursor: pointer;
         }
     </style>
-    
 </head>
 <body>
     <!-- Google Tag Manager (noscript) -->
@@ -68,7 +67,79 @@
 
 
 
-    <script src="iframe-page.js"></script>
-    <script src="time-on-page.js"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        
+        let startDate = new Date();
+        let elapsedTime = 0;
+
+        const focus = function() {
+            startDate = new Date();
+        };
+
+        const blur = function() {
+            const endDate = new Date();
+            const spentTime = endDate.getTime() - startDate.getTime();
+            elapsedTime += spentTime;
+        };
+
+        const beforeunload = function() {
+            const endDate = new Date();
+            const spentTime = endDate.getTime() - startDate.getTime();
+            elapsedTime += spentTime;
+
+           
+            window.dataLayer.push({
+                event: 'page_time_spent',
+                total_time: elapsedTime
+            });
+
+        console.log('Total waktu di halaman parent:', elapsedTime, 'milliseconds');
+        
+        const iframe = document.getElementById('myIframe');
+        iframe.contentWindow.postMessage({
+            event: 'page_time_spent',
+            total_time: elapsedTime
+        }, '*');
+        };
+
+
+        window.addEventListener('focus', focus);
+        window.addEventListener('blur', blur);
+        window.addEventListener('beforeunload', beforeunload);
+
+        document.getElementById('parentButton').onclick = function() {
+            const dataToPush = {
+                event: 'general_event',
+                event_name: 'parent_button_clicked',
+                event_action: 'clicked on Parent Button',
+            };
+
+            window.dataLayer.push(dataToPush);
+            console.log('Data telah dikirim ke dataLayer Parent:', dataToPush);
+
+            // Kirim pesan ke iframe untuk juga push data ke dataLayer iframe
+            const iframe = document.getElementById('myIframe');
+            iframe.contentWindow.postMessage({
+                type: 'iframeButtonClick',
+                dataLayer: dataToPush
+            }, '*');
+        };
+
+        // Mendengarkan pesan dari iframe
+        window.addEventListener("message", function(event) {
+            if (event.data && event.data.type === 'iframeButtonClick') {
+                const iframeData = event.data.dataLayer;
+                window.dataLayer.push(iframeData);
+                console.log('Data diterima dari iframe dan dikirim ke dataLayer Parent:', iframeData);
+            }
+        });
+
+        window.addEventListener("message", function(event) {
+            if (event.data && event.data.type === 'changeIframeSource') {
+                document.getElementById('myIframe').src = event.data.newSource;
+            }
+        });
+    </script>
 </body>
 </html>
