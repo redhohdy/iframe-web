@@ -48,6 +48,14 @@
     <button id="detailArtikelButton">Detail Atikel</button>
     <br>
     <button onclick="window.location.href='https://giovannikuntadi.github.io/odin-recipes/'">Gio</button>
+    <br>
+    <br>
+    <br>
+    <p><b>Movies</b></p>
+    <button id="actionButton">Action</button>
+    <button id="horrorButton">Horror</button>
+    <button id="comedyButton">Comedy</button>
+
 
 
     <script>
@@ -61,6 +69,48 @@
             });
 
             window.location.href = 'iframe-page.html';
+        });
+    </script>
+
+    <script>
+        document.getElementById('actionButton').addEventListener('click', function() {
+
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                event: 'general_event',
+                event_name: 'watch_movie',
+                event_action: 'action',
+            });
+
+            window.location.href = 'content-action.html';
+        });
+    </script>
+
+    <script>
+        document.getElementById('horrorButton').addEventListener('click', function() {
+
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                event: 'general_event',
+                event_name: 'watch_movie',
+                event_action: 'horror',
+            });
+
+            window.location.href = 'content-horror.html';
+        });
+    </script>
+
+    <script>
+        document.getElementById('comedyButton').addEventListener('click', function() {
+
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+                event: 'general_event',
+                event_name: 'watch_movie',
+                event_action: 'comedy',
+            });
+
+            window.location.href = 'content-comedy.html';
         });
     </script>
 
